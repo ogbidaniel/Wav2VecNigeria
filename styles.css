@@ -42,6 +42,7 @@ header {
     font-size: 1.2em;
     margin-top: 0;
 }
+
 /* General card styling */
 .card {
     background-color: #2c2c2c;
@@ -52,21 +53,23 @@ header {
     flex-direction: column;
     position: relative; /* Required for the pseudo-element */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and box-shadow */
+    overflow: hidden; /* Ensure the pseudo-element does not overflow */
 }
 
 /* Pseudo-element for the gradient outline */
 .card::before {
     content: '';
     position: absolute;
-    top: -2px; /* Adjust position to match the desired outline size */
+    top: -2px;
     left: -2px;
     right: -2px;
     bottom: -2px;
-    border-radius: 10px; /* Match the card's border-radius */
+    border-radius: 12px; /* Match the card's border-radius and add a small offset */
     background: linear-gradient(45deg, #ff00ff, #00ffff);
-    opacity: 0;
-    transition: opacity 0.3s ease; /* Smooth transition for the outline visibility */
     z-index: -1; /* Ensure it stays behind the card content */
+    transition: opacity 0.3s ease; /* Smooth transition for the outline visibility */
+    opacity: 0; /* Start with the outline hidden */
+    box-sizing: border-box; /* Ensure the size includes the border */
 }
 
 /* Hover effect */
@@ -78,6 +81,7 @@ header {
 .card:hover::before {
     opacity: 1; /* Show the gradient outline */
 }
+
 
 .card-large {
     flex-direction: row;
