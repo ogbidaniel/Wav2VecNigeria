@@ -33,7 +33,8 @@ header {
 .gradient-text {
     font-size: 2em;
     background: linear-gradient(45deg, #ff00ff, #00ffff);
-    -webkit-background-clip: text;
+    background-clip: text; /* Standard property */
+    -webkit-background-clip: text; /* Vendor-prefixed property */
     -webkit-text-fill-color: transparent;
     margin-bottom: 10px;
 }
