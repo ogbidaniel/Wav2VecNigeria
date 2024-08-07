@@ -48,7 +48,7 @@ header {
     background-color: #2c2c2c;
     border-radius: 10px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     position: relative; /* Required for the pseudo-element */
@@ -65,7 +65,7 @@ header {
     right: -2px;
     bottom: -2px;
     border-radius: 12px; /* Match the card's border-radius and add a small offset */
-    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    background: linear-gradient(45deg, #cf1da3, #00ffff);
     z-index: -1; /* Ensure it stays behind the card content */
     transition: opacity 0.3s ease; /* Smooth transition for the outline visibility */
     opacity: 0; /* Start with the outline hidden */
@@ -97,7 +97,7 @@ header {
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 30px;
 }
 .card-small {
     height: 100%;
