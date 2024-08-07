@@ -117,9 +117,10 @@ header {
     text-decoration: none;
     display: inline-block;
     margin-top: auto;
-    width: 80px;
+    width: 90px;
     text-align: center;
     transition: background-color 0.3s ease; /* Smooth transition for background-color */
+    font-size: 0.8em; /* Reduced font size for button text */
 }
 
 /* Specific styling for the header button */
