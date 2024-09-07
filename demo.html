@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASR Demo - Daniel Ogbuigwe</title>
     <link rel="stylesheet" href="styles.css">
+    <script type="module" src="script.js"></script>
 </head>
 <body>
     <header>
@@ -18,32 +19,40 @@
     </header>
 
     <div class="container">
-        <h1 class="gradient-text">ASR for the Ika langugage</h1>
-        <p class="subtitle">Record or upload your speech audio.</p>
+        <h1 class="gradient-text">ASR for the Ika Language</h1>
+        <p class="subtitle">Record or upload your speech audio for transcription.</p>
         
+        <!-- Waveform Visualizer -->
+        <div id="waveform" class="waveform-container">
+            <!-- The waveform will be dynamically inserted here -->
+        </div>
+
+        <!-- Transcript Area -->
         <div class="card card-large">
             <div class="card-content">
-                <h3>Transcript</h3>
-                <p id="transcript"></p>
+                <h3>Live Transcript</h3>
+                <p id="transcript" class="transcript-text">Your transcription will appear here...</p>
             </div>
         </div>
 
+        <!-- Audio Controls: Record and Upload -->
         <div class="button-container">
             <button id="recordButton" class="action-button">
-                <img src="./assets/microphone.svg" alt="microphone icon">
+                <img src="./assets/microphone.svg" alt="microphone icon" class="button-icon">
                 <span>Record</span>
             </button>
-            <button id="uploadButton" class="action-button">
-                <img src="./assets/upload.svg" alt="upload icon">
-                <span>Upload</span>
-            </button>
+            <label for="uploadInput" id="uploadButton" class="action-button">
+                <img src="./assets/upload.svg" alt="upload icon" class="button-icon"> Upload
+                <input type="file" id="uploadInput" accept="audio/*" style="display: none;">
+            </label>
         </div>
+
+        <!-- Audio Upload Input (Hidden) -->
+        <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
     </div>
 
-    <div>
-        <footer>
-            &copy; 2024 Daniel Ogbuigwe | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-        </footer>
-    </div>
+    <footer>
+        &copy; 2024 Daniel Ogbuigwe | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    </footer>
 </body>
 </html>
