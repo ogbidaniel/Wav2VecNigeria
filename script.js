@@ -1,159 +1,85 @@
-// ASR App Core Functionality
+// Get the necessary elements from the HTML
+const recordButton = document.getElementById('recordButton'); // The button to start/stop recording
+const uploadInput = document.getElementById('uploadInput');   // The hidden file input for uploading audio files
+const transcript = document.getElementById('transcript');     // The area where the transcript will be displayed
 
-// Import WaveSurfer for waveform visualization
-import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js'
+let mediaRecorder;  // This will hold the MediaRecorder object
+let audioChunks = [];  // This will store the recorded audio data
+let isRecording = false;  // Keeps track of whether the recording is active
 
-// Application State
-const appState = {
-    isRecording: false,
-    isProcessing: false,
-    audioBlob: null,
-    wavesurfer: null,
-    ws: null // WebSocket connection
-};
+// Event listener for the record button
+recordButton.addEventListener('click', async () => {
+    // If not recording, start recording
+    if (!isRecording) {
+        // Request access to the microphone
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        // Create a new MediaRecorder to handle recording
+        mediaRecorder = new MediaRecorder(stream);
+        
+        // This event is fired when there's audio data available
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data); // Store each chunk of audio data
+        };
 
-// Initialize WaveSurfer
-function initWaveSurfer() {
-    appState.wavesurfer = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: 'violet',
-        progressColor: 'purple',
-        responsive: true,
-        height: 100,
-    });
-}
+        // When recording stops, send the audio to the server for transcription
+        mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' }); // Combine the audio chunks into a single file
+            
+            // Clear the audio chunks array for the next recording
+            audioChunks = [];
 
-// Audio Recording
-let mediaRecorder;
-const audioChunks = [];
+            // Send the audio to the server and get the transcription
+            const transcriptText = await uploadAudio(audioBlob);
 
-function startRecording() {
-    if (appState.isRecording) return;
-    
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-            appState.isRecording = true;
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                appState.audioBlob = audioBlob;
-                processAudio(audioBlob);
-            };
-            mediaRecorder.start();
-            updateUI();
-        })
-        .catch(error => {
-            console.error('Error accessing microphone:', error);
-            showError('Unable to access microphone. Please check your permissions.');
-        });
-}
+            // Display the transcription in the transcript area
+            transcript.innerText = transcriptText || 'Transcription failed.';
+        };
 
-function stopRecording() {
-    if (!appState.isRecording) return;
-    
-    appState.isRecording = false;
-    mediaRecorder.stop();
-    updateUI();
-}
-
-// File Upload Handling
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('audio/')) {
-        appState.audioBlob = file;
-        processAudio(file);
-    } else {
-        showError('Please upload a valid audio file.');
+        // Start recording
+        mediaRecorder.start();
+        isRecording = true;
+        recordButton.innerText = 'Stop Recording';  // Change button text to indicate recording is active
+    } 
+    // If already recording, stop recording
+    else {
+        mediaRecorder.stop();  // Stop recording
+        isRecording = false;
+        recordButton.innerText = 'Record';  // Change button text back to "Record"
     }
-}
-
-// Audio Processing
-function processAudio(audioBlob) {
-    appState.isProcessing = true;
-    updateUI();
-
-    // Display the audio waveform
-    const audioUrl = URL.createObjectURL(audioBlob);
-    appState.wavesurfer.load(audioUrl);
-
-    // Send audio to ASR service (placeholder for actual API call)
-    sendAudioToASR(audioBlob);
-}
-
-// Placeholder for ASR service API call
-function sendAudioToASR(audioBlob) {
-    // Simulating API call with setTimeout
-    setTimeout(() => {
-        const transcription = "This is a simulated transcription of your audio.";
-        updateTranscript(transcription);
-        appState.isProcessing = false;
-        updateUI();
-    }, 3000);
-}
-
-// WebSocket for real-time updates (placeholder implementation)
-function initWebSocket() {
-    appState.ws = new WebSocket('ws://your-websocket-url');
-    appState.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.type === 'transcription') {
-            updateTranscript(message.text);
-        }
-    };
-}
-
-// UI Updates
-function updateUI() {
-    const recordButton = document.querySelector('#recordButton');
-    const uploadButton = document.querySelector('#uploadButton');
-    const transcriptArea = document.querySelector('#transcript');
-
-    recordButton.textContent = appState.isRecording ? 'Stop Recording' : 'Start Recording';
-    recordButton.disabled = appState.isProcessing;
-    uploadButton.disabled = appState.isRecording || appState.isProcessing;
-
-    if (appState.isProcessing) {
-        transcriptArea.textContent = 'Processing audio...';
-    }
-}
-
-function updateTranscript(text) {
-    const transcriptArea = document.querySelector('#transcript');
-    transcriptArea.textContent = text;
-}
-
-function showError(message) {
-    // Implement error display logic (e.g., show a toast notification)
-    console.error(message);
-    alert(message); // Replace with a more user-friendly notification in production
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    initWaveSurfer();
-    initWebSocket();
-
-    const recordButton = document.querySelector('#recordButton');
-    const uploadButton = document.querySelector('#uploadButton');
-
-    recordButton.addEventListener('click', () => {
-        if (appState.isRecording) {
-            stopRecording();
-        } else {
-            startRecording();
-        }
-    });
-
-    uploadButton.addEventListener('change', handleFileUpload);
 });
 
-// Export functions for use in other scripts if needed
-export {
-    startRecording,
-    stopRecording,
-    handleFileUpload,
-    updateTranscript
-};
+// Function to send audio to the server and get transcription
+async function uploadAudio(audioBlob) {
+    const formData = new FormData();  // Create form data to send the audio
+    formData.append('audio', audioBlob);  // Attach the audio file
+
+    try {
+        // Send the form data to the backend
+        const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+        });
+
+        // Convert the server's response to JSON
+        const result = await response.json();
+
+        // Return the transcription text
+        return result.transcription;
+    } catch (error) {
+        console.error('Error uploading audio:', error);
+        return null;  // Return null if there's an error
+    }
+}
+
+// Event listener for uploading audio files
+uploadInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0];  // Get the selected audio file
+    if (file) {
+        // Send the audio file to the server and get the transcription
+        const transcriptText = await uploadAudio(file);
+
+        // Display the transcription in the transcript area
+        transcript.innerText = transcriptText || 'Transcription failed.';
+    }
+});
