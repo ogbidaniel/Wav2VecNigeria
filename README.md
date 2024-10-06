@@ -93,7 +93,7 @@ Wav2VecNigeria aims to bridge the language gap in speech recognition technology 
 
 ## Example System Architecture Diagram
 
-![System Architecture Diagram] (assets/Wav2VecNigeria_System_Architecture.png)
+![System Architecture Diagram] (assets/architecture.png)
 
 ## Simplifying for MVP (Minimum Viable Product)
 
