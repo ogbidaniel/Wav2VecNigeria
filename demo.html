@@ -19,21 +19,32 @@
     </header>
 
     <div class="container">
-        <h1 class="gradient-text">ASR for the Ika Language</h1>
+        <h1 class="main-heading">Automatic Speech Recognition</h1>
+        <h1 class="main-heading">For The</h1>
+        <h1 class="main-heading">Ika Language</h1>
         <p class="subtitle">Record or upload your speech audio for transcription.</p>
         
-        <!-- Waveform Visualizer -->
-        <div id="waveform" class="waveform-container">
-            <!-- The waveform will be dynamically inserted here -->
-        </div>
 
-        <!-- Transcript Area -->
-        <div class="card card-large">
-            <div class="card-content">
-                <h3>Live Transcript</h3>
-                <p id="transcript" class="transcript-text">Your transcription will appear here...</p>
+        <div class="card-container">
+            <!-- Waveform Visualizer -->
+            <div class="card card-large">
+                <div class="card-content">
+                    <h3>Audio</h3>
+                    <div id="waveform" class="waveform-container"></div> 
+                </div>
+                    
+                <!-- The waveform will be dynamically inserted here -->
+            </div>
+
+            <!-- Transcript Area -->
+            <div class="card card-large">
+                <div class="card-content">
+                    <h3>Transcript</h3>
+                    <p id="transcript" class="transcript-text">Your transcription will appear here...</p>
+                </div>
             </div>
         </div>
+
 
         <!-- Audio Controls: Record and Upload -->
         <div class="button-container">
@@ -41,10 +52,11 @@
                 <img src="./assets/microphone.svg" alt="microphone icon" class="button-icon">
                 <span>Record</span>
             </button>
-            <label for="uploadInput" id="uploadButton" class="action-button">
-                <img src="./assets/upload.svg" alt="upload icon" class="button-icon"> Upload
+            <button for="uploadInput" id="uploadButton" class="action-button">
+                <img src="./assets/upload.svg" alt="upload icon" class="button-icon">
+                <span>Upload</span>
                 <input type="file" id="uploadInput" accept="audio/*" style="display: none;">
-            </label>
+            </button>
         </div>
 
         <!-- Audio Upload Input (Hidden) -->

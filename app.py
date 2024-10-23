@@ -134,7 +134,7 @@ def get():
     )
 
 # Inference endpoint
-@rt("/inference", method="POST")
+@rt("/inference")
 def inference():
     try:
         audio_data = request.body
