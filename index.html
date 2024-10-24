@@ -8,57 +8,85 @@
     <script type="module" src="script.js"></script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="header-text">
-                <p>Daniel Ogbuigwe</p>
-                <p>ASR Demo</p>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <span class="navbar-title">Daniel Ogbuigwe</span>
+                <span class="navbar-subtitle">Speech App</span>
             </div>
-            <a href="#" class="btn header-btn">Contact</a>
-        </div>
-    </header>
-
-    <div class="container">
-        <h1 class="main-heading">Automatic Speech Recognition</h1>
-        <h1 class="main-heading">For The</h1>
-        <h1 class="main-heading">Ika Language</h1>
-        <p class="subtitle">Try an experimental demo using a custom Wav2vec 2.0 model</p>
-        
-        <div class="card card-large">
-            <img src="./assets/ika.png" alt="ASR_demo_thumbnail">
-            <div class="card-content">
-                <h3>MMS Ika ASR models</h3>
-                <p>Transcribe spoken Ika with my custom Wav2vec2 model</p>
-                <p class="tag">Audio AI</p>
-                <a href="demo.html" class="btn">Try it</a>
+            <a href="#" class="btn btn-primary">Contact</a>
+        </nav>
+    
+        <header class="hero">
+            <h1 class="hero-title">Automatic Speech Recognition</h1>
+            <h2 class="hero-subtitle">For The</h2>
+            <h2 class="hero-subtitle accent">Ika Language</h2>
+        </header>
+    
+        <main class="main-content">
+            <p class="main-description">Try an experimental demo using a custom Wav2vec 2.0 model</p>
+    
+            <div class="card-section">
+                <!-- Featured Card -->
+                <div class="card card-featured">
+                    <div class="card-image-wrapper">
+                        <img src="./assets/ika.png" alt="ASR demo thumbnail" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">MMS Ika ASR models</h3>
+                        <p class="card-text">Transcribe spoken Ika with my custom Wav2vec2 model</p>
+                        <div class="card-action">
+                            <a href="demo.html" class="btn btn-primary">Try it</a>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Card Grid -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-image-wrapper">
+                            <img src="./assets/ASR4ikk.png" alt="Research Paper" class="card-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Research Paper</h3>
+                            <p class="card-text">Read about the methodology and results of our Ika ASR project.</p>
+                            <div class="card-action">
+                                <a href="https://doi.org/10.48550/arXiv.2410.00940" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-image-wrapper">
+                            <img src="./assets/contributions.webp" alt="Contribute your audio data" class="card-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Contribute Data</h3>
+                            <p class="card-text">Help improve our model by contributing your Ika audio recordings.</p>
+                            <div class="card-action">
+                                <a href="contribution.html" class="btn btn-primary">Contribute</a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-image-wrapper">
+                            <img src="./assets/monitor.png" alt="Fine-tune your own model" class="card-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Fine-tune your own model</h3>
+                            <p class="card-text">Follow this jupyter notebook to fine tune your own speech recognition model.</p>
+                            <div class="card-action">
+                                <a href="#" class="btn btn-primary">Huggingface🤗</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="card-grid">
-            <div class="card card-small">
-                <img src="./assets/ASR4ikk.png" alt="Research Paper">
-                <h3>Research Paper</h3>
-                <p>Read about the methodology and results of our Ika ASR project.</p>
-                <a href="https://doi.org/10.48550/arXiv.2410.00940" class="btn">Read More</a>
-            </div>
-            <div class="card card-small">
-                <img src="./assets/contributions.webp" alt="Contribute your audio data">
-                <h3>Contribute Data</h3>
-                <p>Help improve our model by contributing your Ika audio recordings.</p>
-                <a href="contribution.html" class="btn">Contribute</a>
-            </div>
-            <div class="card card-small">
-                <img src="./assets/finetuning.png" alt="Contact Me">
-                <h3>Fine-tune your own model</h3>
-                <p>Follow this jupyter notebook to fine tune your own speech recognition model.</p>
-                <a href="#" class="btn">Huggingface🤗</a>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <footer>
-            &copy; 2024 Daniel Ogbuigwe | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </main>
+    
+        <footer class="footer">
+            <p>© 2024 Daniel Ogbuigwe | <a href="#" class="footer-link">Privacy Policy</a> | <a href="#" class="footer-link">Terms of Service</a></p>
         </footer>
     </div>
 </body>

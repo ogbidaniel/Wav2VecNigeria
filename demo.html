@@ -3,68 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASR Demo - Daniel Ogbuigwe</title>
+    <title>ASR Demo</title>
     <link rel="stylesheet" href="styles.css">
-    <script type="module" src="script.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="header-text">
-                <p>Daniel Ogbuigwe</p>
-                <p>ASR Demo</p>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <span class="navbar-title">Daniel Ogbuigwe</span>
+                <span class="navbar-subtitle">Speech App</span>
             </div>
-            <a href="#" class="btn header-btn">Contact</a>
-        </div>
-    </header>
+            <a href="index.html" class="btn btn-primary">Home</a>
+        </nav>
 
-    <div class="container">
-        <h1 class="main-heading">Automatic Speech Recognition</h1>
-        <h1 class="main-heading">For The</h1>
-        <h1 class="main-heading">Ika Language</h1>
-        <p class="subtitle">Record or upload your speech audio for transcription.</p>
-        
-
-        <div class="card-container">
-            <!-- Waveform Visualizer -->
-            <div class="card card-large">
-                <div class="card-content">
-                    <h3>Audio</h3>
-                    <div id="waveform" class="waveform-container"></div> 
-                </div>
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab tab-active">Speech-to-text</button>
+                <button class="tab">Text-to-speech</button>
+            </div>
+    
+            <div class="content-area">
+                <div class="panel panel-left">
+                    <h3 class="panel-title">Upload or Record Audio</h3>
                     
-                <!-- The waveform will be dynamically inserted here -->
-            </div>
+                    <div id="waveform" class="waveform-container"></div>
+                    
+                    <div class="controls-group">
+                        <button id="uploadButton" class="btn btn-primary">Upload Audio</button>
+                        <input type="file" id="uploadInput" hidden accept="audio/*">
+                        <button id="recordButton" class="btn btn-primary">Record</button>
+                        <button id="playButton" class="btn btn-primary">Play/Pause</button>
+                    </div>
+                </div>
+    
+                <div class="panel panel-right">
+                    <h3 class="panel-title">Transcription Output</h3>
+    
+                    <div id="transcriptionOutput" class="transcription-area" readonly></div>
 
-            <!-- Transcript Area -->
-            <div class="card card-large">
-                <div class="card-content">
-                    <h3>Transcript</h3>
-                    <p id="transcript" class="transcript-text">Your transcription will appear here...</p>
+                    <div class="controls-group">
+                        <button id="submitTranscription" class="btn btn-primary">Submit</button>
+                        <button id="clearTranscription" class="btn btn-primary">Clear</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="languageSelect" class="form-label">Language:</label>
+                        <select id="languageSelect" class="form-select">
+                            <option value="english-ika">English</option>
+                            <option value="english-ika">Ika</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+    
+            <div class="examples-section">
+                <h3 class="section-title">Examples</h3>
+                <table class="examples-table">
+                    <thead>
+                        <tr>
+                            <th>Audio File</th>
+                            <th>Language</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>english.mp3</td>
+                            <td>English</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-
-        <!-- Audio Controls: Record and Upload -->
-        <div class="button-container">
-            <button id="recordButton" class="action-button">
-                <img src="./assets/microphone.svg" alt="microphone icon" class="button-icon">
-                <span>Record</span>
-            </button>
-            <button for="uploadInput" id="uploadButton" class="action-button">
-                <img src="./assets/upload.svg" alt="upload icon" class="button-icon">
-                <span>Upload</span>
-                <input type="file" id="uploadInput" accept="audio/*" style="display: none;">
-            </button>
-        </div>
-
-        <!-- Audio Upload Input (Hidden) -->
-        <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
     </div>
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
 
-    <footer>
-        &copy; 2024 Daniel Ogbuigwe | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    <footer class="footer">
+        <p>© 2024 Daniel Ogbuigwe | <a href="#" class="footer-link">Privacy Policy</a> | <a href="#" class="footer-link">Terms of Service</a></p>
     </footer>
 </body>
 </html>

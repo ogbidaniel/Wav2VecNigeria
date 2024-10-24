@@ -1,85 +1,105 @@
+// Import Wavesurfer.js in your HTML file
+// Add this to your <head> or just before the closing </body> tag:
+// <script src="https://unpkg.com/wavesurfer.js@7"></script>
+
 // Get the necessary elements from the HTML
-const recordButton = document.getElementById('recordButton'); // The button to start/stop recording
-const uploadInput = document.getElementById('uploadInput');   // The hidden file input for uploading audio files
-const transcript = document.getElementById('transcript');     // The area where the transcript will be displayed
+const recordButton = document.querySelector('#recordButton');
+const uploadButton = document.querySelector('#uploadButton');
+const uploadInput = document.querySelector('#uploadInput');
+const playButton = document.querySelector('#playButton');
+const transcriptionOutput = document.querySelector('#transcriptionOutput');
+const languageSelect = document.querySelector('#languageSelect');
+const submitTranscription = document.querySelector('#submitTranscription');
 
 let mediaRecorder;  // This will hold the MediaRecorder object
 let audioChunks = [];  // This will store the recorded audio data
 let isRecording = false;  // Keeps track of whether the recording is active
 
+// Initialize Wavesurfer
+let wavesurfer = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: '#CBD2A4',
+    progressColor: '#54473F',
+    cursorColor: '#9A7E6F',
+    height: 200,
+    responsive: true,
+    barWidth: 2,
+});
+
 // Event listener for the record button
-recordButton.addEventListener('click', async () => {
-    // If not recording, start recording
+recordButton?.addEventListener('click', async () => {
+    console.log('Record button clicked');
     if (!isRecording) {
-        // Request access to the microphone
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
-        // Create a new MediaRecorder to handle recording
-        mediaRecorder = new MediaRecorder(stream);
-        
-        // This event is fired when there's audio data available
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        audioChunks = [];  // Clear any previous data
+
         mediaRecorder.ondataavailable = event => {
-            audioChunks.push(event.data); // Store each chunk of audio data
+            audioChunks.push(event.data);
         };
 
-        // When recording stops, send the audio to the server for transcription
-        mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' }); // Combine the audio chunks into a single file
-            
-            // Clear the audio chunks array for the next recording
-            audioChunks = [];
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioURL = URL.createObjectURL(audioBlob);
+            wavesurfer.load(audioURL);
 
-            // Send the audio to the server and get the transcription
-            const transcriptText = await uploadAudio(audioBlob);
-
-            // Display the transcription in the transcript area
-            transcript.innerText = transcriptText || 'Transcription failed.';
+            wavesurfer.on('ready', () => {
+                console.log('Waveform is ready for recorded audio.');
+            });
         };
 
-        // Start recording
         mediaRecorder.start();
         isRecording = true;
-        recordButton.innerText = 'Stop Recording';  // Change button text to indicate recording is active
-    } 
-    // If already recording, stop recording
-    else {
-        mediaRecorder.stop();  // Stop recording
+        recordButton.innerText = 'Stop Recording';
+    } else {
+        mediaRecorder.stop();
         isRecording = false;
-        recordButton.innerText = 'Record';  // Change button text back to "Record"
+        recordButton.innerText = 'Record';
     }
 });
 
-// Function to send audio to the server and get transcription
-async function uploadAudio(audioBlob) {
-    const formData = new FormData();  // Create form data to send the audio
-    formData.append('audio', audioBlob);  // Attach the audio file
+// Event listener for the upload button
+uploadButton?.addEventListener('click', () => {
+    console.log('Upload button clicked');
+    uploadInput.click();
+});
+
+// Event listener for uploading audio files
+uploadInput?.addEventListener('change', (event) => {
+    console.log('Upload input changed');
+    const file = event.target.files[0];
+    if (file) {
+        wavesurfer.load(URL.createObjectURL(file));
+
+        wavesurfer.on('ready', () => {
+            console.log('Waveform is ready for uploaded audio.');
+        });
+    }
+});
+
+// Play/Pause button functionality
+playButton?.addEventListener('click', () => {
+    console.log('Play/Pause button clicked');
+    wavesurfer.playPause();
+});
+
+// Event listener for submitting transcription
+submitTranscription?.addEventListener('click', async () => {
+    console.log('Submit button clicked');
+    const formData = new FormData();
+    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    formData.append('audio', audioBlob);
+    formData.append('language', languageSelect.value);
 
     try {
-        // Send the form data to the backend
         const response = await fetch('/api/transcribe', {
             method: 'POST',
             body: formData,
         });
-
-        // Convert the server's response to JSON
         const result = await response.json();
-
-        // Return the transcription text
-        return result.transcription;
+        transcriptionOutput.value = result.transcription || 'Transcription failed.';
     } catch (error) {
         console.error('Error uploading audio:', error);
-        return null;  // Return null if there's an error
-    }
-}
-
-// Event listener for uploading audio files
-uploadInput.addEventListener('change', async (event) => {
-    const file = event.target.files[0];  // Get the selected audio file
-    if (file) {
-        // Send the audio file to the server and get the transcription
-        const transcriptText = await uploadAudio(file);
-
-        // Display the transcription in the transcript area
-        transcript.innerText = transcriptText || 'Transcription failed.';
+        transcriptionOutput.value = 'Transcription failed.';
     }
 });
