@@ -10,6 +10,8 @@ const playButton = document.querySelector('#playButton');
 const transcriptionOutput = document.querySelector('#transcriptionOutput');
 const languageSelect = document.querySelector('#languageSelect');
 const submitTranscription = document.querySelector('#submitTranscription');
+const darkModeToggle = document.querySelector('#darkModeToggle');
+const prefersDarkMode = localStorage.getItem('theme') === 'dark';
 
 let mediaRecorder;  // This will hold the MediaRecorder object
 let audioChunks = [];  // This will store the recorded audio data
@@ -24,6 +26,25 @@ let wavesurfer = WaveSurfer.create({
     height: 200,
     responsive: true,
     barWidth: 2,
+});
+
+if (prefersDarkMode) {
+    document.body.classList.add('dark-mode');
+}
+
+// Event listener for dark mode toggle button
+darkModeToggle?.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+});
+
+/* Ensure all relevant elements update when dark mode is toggled */
+const darkModeElements = document.querySelectorAll('.navbar, .btn-primary, .tabs-container, .card, .footer');
+darkModeToggle?.addEventListener('click', () => {
+    darkModeElements.forEach(element => {
+        element.classList.toggle('dark-mode');
+    });
 });
 
 // Event listener for the record button
