@@ -80,7 +80,7 @@ body {
 
 /* Card Section */
 .card-section {
-    padding: 3rem;
+    padding: 3rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -110,40 +110,73 @@ body {
 }
 
 .card-grid {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    display: grid;  /* Use grid for better control */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;   /* Spacing between grid items */
     justify-content: center;
+    align-items: start; /* Align items to the top of their grid area */
+    width: 90%;
+    margin: 0 auto;
 }
 
 .card {
-    padding: 20px; /* Adds space between the card edge and its content */
+    position: relative; /* Required for pseudo-element positioning */
+    padding: 20px;
     display: flex;
-    flex-direction: column; /* Adjusts layout direction if needed */
-    gap: 10px; /* Adds space between elements inside the card */
-    box-sizing: border-box; /* Ensures padding is included in the element's dimensions */
-  }
-  
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    overflow: hidden; /* To prevent the pseudo-element from overflowing */
+    border-radius: 10px; /* Consistent border-radius */
+    background-color: #1e1e1e;
+}
 
 .card:hover {
     transform: scale(1.05);
-    box-shadow: 0px 8px 20px rgba(255, 87, 34, 0.6);
+}
+
+.card:hover::before {  /* Use ::before pseudo-element */
+    content: '';
+    position: absolute;
+    top: -3px; /* Adjust to control outline offset */
+    left: -3px; /* Adjust to control outline offset */
+    right: -3px; 
+    bottom: -3px;
+    z-index: -1; /* Place behind the card content */
+    background: linear-gradient(to right, #e66465, #9198e5);  /* Gradient */
+    border-radius: 16px; /* Match card border-radius if needed */
 }
 
 .card-image-wrapper {
     overflow: hidden;
-    height: 200px;
+    position: relative; /* For aspect ratio trick */
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio (adjust as needed) */
+}
+
+.card-image-wrapper-feature {
+    overflow: hidden;
+    position: relative; /* For aspect ratio trick */
+    width: 100%;
+    padding-bottom: 50%; /* 16:9 aspect ratio (adjust as needed) */
 }
 
 .card img {
-    max-width: 100%; /* Ensures the image does not overflow the card */
-    height: auto; /* Maintains the aspect ratio of the image */
-    border-radius: 10px; /* Optional: Adds rounded corners to images */
-  }
+    position: absolute;  /* Absolute positioning within container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* Ensures image fills container while maintaining aspect ratio */
+    border-radius: 10px; /* Round only top corners */
+
+}
   
 
 .card-content {
     padding: 1.5rem;
+    flex-grow: 1;
+    margin-top: auto;
 }
 
 .card-title {
