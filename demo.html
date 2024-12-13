@@ -12,53 +12,53 @@
     <div class="app-container">
         <nav class="navbar">
             <div class="navbar-brand">
-                <span class="navbar-title">Daniel Ogbuigwe</span>
-                <span class="navbar-subtitle">Speech App</span>
+                <span class="navbar-title">Speech App</span>
             </div>
-            <a href="index.html" class="btn btn-primary">Home</a>
-            <button id="darkModeToggle" class="btn btn-primary">Toggle Dark Mode</button>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle">Menu</button>
+                <ul class="dropdown-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
         </nav>
 
         <div class="tabs-container">
-            <div class="tabs">
-                <button class="tab tab-active">Speech-to-text</button>
-                <button class="tab">Text-to-speech</button>
-            </div>
-    
             <div class="content-area">
                 <div class="panel panel-left">
                     <h3 class="panel-title">Upload or Record Audio</h3>
-                    
                     <div id="waveform" class="waveform-container"></div>
-                    
                     <div class="controls-group">
                         <button id="uploadButton" class="btn btn-primary">Upload Audio</button>
                         <input type="file" id="uploadInput" hidden accept="audio/*">
                         <button id="recordButton" class="btn btn-primary">Record</button>
                         <button id="playButton" class="btn btn-primary">Play/Pause</button>
                     </div>
+                    <div class="slider-container">
+                        <label for="volumeControl">Volume:</label>
+                        <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+                        <label for="speedControl">Speed:</label>
+                        <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
+                    </div>
                 </div>
-    
+
                 <div class="panel panel-right">
                     <h3 class="panel-title">Transcription Output</h3>
-    
                     <textarea id="transcriptionOutput" class="transcription-area" readonly></textarea>
-
                     <div class="controls-group">
                         <button id="submitTranscription" class="btn btn-primary">Submit</button>
                         <button id="clearTranscription" class="btn btn-primary">Clear</button>
                     </div>
-
                     <div class="form-group">
                         <label for="languageSelect" class="form-label">Language:</label>
                         <select id="languageSelect" class="form-select">
-                            <option value="english-ika">English</option>
-                            <option value="english-ika">Ika</option>
+                            <option value="en">English</option>
+                            <option value="ikk">Ika</option>
                         </select>
                     </div>
                 </div>
             </div>
-    
+
             <div class="examples-section">
                 <h3 class="section-title">Examples</h3>
                 <table class="examples-table">
@@ -70,7 +70,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>english.mp3</td>
+                            <td>
+                                <audio controls>
+                                    <source src="english.mp3" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </td>
                             <td>English</td>
                         </tr>
                     </tbody>
@@ -78,7 +83,6 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/wavesurfer.js@7"></script>
 
     <footer class="footer">
         <p>© 2024 Daniel Ogbuigwe | <a href="#" class="footer-link">Privacy Policy</a> | <a href="#" class="footer-link">Terms of Service</a></p>

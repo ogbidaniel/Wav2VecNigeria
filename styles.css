@@ -34,6 +34,98 @@ body {
     color: #b0b0b0; /* Slightly lighter contrast */
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    background-color: #2c2c2c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #1e1e1e;
+    min-width: 160px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 8px 12px;
+}
+
+.dropdown-menu li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Panels */
+.panel {
+    padding: 1.5rem;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+}
+
+.panel-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.waveform-container {
+    height: 200px;
+    margin-bottom: 1rem;
+    background-color: #2c2c2c;
+    border-radius: 8px;
+}
+
+.slider-container {
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.slider-container label {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+/* Examples Section */
+.examples-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.examples-table th, .examples-table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+}
+
+.examples-table th {
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+.examples-table td audio {
+    width: 100%;
+}
+
 .btn {
     padding: 0.5rem 1rem;
     background-color: #2c2c2c; /* Button base */
