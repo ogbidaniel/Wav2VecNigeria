@@ -12,7 +12,7 @@
     <div class="app-container">
         <nav class="navbar">
             <div class="navbar-brand">
-                <span class="navbar-title">Speech App</span>
+                <span class="navbar-title">Transcribe</span>
             </div>
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle">Menu</button>
@@ -50,11 +50,16 @@
                         <button id="clearTranscription" class="btn btn-primary">Clear</button>
                     </div>
                     <div class="form-group">
-                        <label for="languageSelect" class="form-label">Language:</label>
-                        <select id="languageSelect" class="form-select">
+                        <label for="languageSelect" class="form-label">
+                            Transcription Language
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <select id="languageSelect" class="form-select" aria-label="Select transcription language">
+                            <option value="">Please select a language</option>
                             <option value="en">English</option>
                             <option value="ikk">Ika</option>
                         </select>
+                        <small class="form-help-text">Choose the language of your audio for accurate transcription</small>
                     </div>
                 </div>
             </div>

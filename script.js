@@ -16,6 +16,7 @@ const prefersDarkMode = localStorage.getItem('theme') === 'dark';
 let mediaRecorder;  // This will hold the MediaRecorder object
 let audioChunks = [];  // This will store the recorded audio data
 let isRecording = false;  // Keeps track of whether the recording is active
+let currentAudioBlob = null; // Add this at the top with other state variables
 
 // Initialize Wavesurfer
 let wavesurfer = WaveSurfer.create({
@@ -61,6 +62,7 @@ recordButton?.addEventListener('click', async () => {
 
         mediaRecorder.onstop = () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            currentAudioBlob = audioBlob; // Store the blob
             const audioURL = URL.createObjectURL(audioBlob);
             wavesurfer.load(audioURL);
 
@@ -90,6 +92,7 @@ uploadInput?.addEventListener('change', (event) => {
     console.log('Upload input changed');
     const file = event.target.files[0];
     if (file) {
+        currentAudioBlob = file; // Store the uploaded file as blob
         wavesurfer.load(URL.createObjectURL(file));
 
         wavesurfer.on('ready', () => {
@@ -104,23 +107,76 @@ playButton?.addEventListener('click', () => {
     wavesurfer.playPause();
 });
 
-// Event listener for submitting transcription
-submitTranscription?.addEventListener('click', async () => {
-    console.log('Submit button clicked');
-    const formData = new FormData();
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-    formData.append('audio', audioBlob);
-    formData.append('language', languageSelect.value);
+// Update the API URL configuration
+const API_URL = 'http://localhost:5000';
 
+// Update the transcription submission handler
+submitTranscription?.addEventListener('click', async () => {
     try {
-        const response = await fetch('/api/transcribe', {
+        // Disable submit button and show loading state
+        submitTranscription.disabled = true;
+        transcriptionOutput.value = 'Transcribing...';
+
+        // Validate inputs
+        if (!currentAudioBlob) {
+            throw new Error('Please record or upload audio first.');
+        }
+
+        if (!languageSelect.value) {
+            throw new Error('Please select a language.');
+        }
+
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('audio', currentAudioBlob);
+        formData.append('language', languageSelect.value);
+
+        // Make API call
+        const response = await fetch(`${API_URL}/api/transcribe`, {
             method: 'POST',
             body: formData,
         });
-        const result = await response.json();
-        transcriptionOutput.value = result.transcription || 'Transcription failed.';
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || `Server error: ${response.status}`);
+        }
+
+        // Update UI with transcription
+        transcriptionOutput.value = data.transcription;
+
     } catch (error) {
-        console.error('Error uploading audio:', error);
-        transcriptionOutput.value = 'Transcription failed.';
+        console.error('Transcription error:', error);
+        transcriptionOutput.value = `Error: ${error.message}`;
+    } finally {
+        submitTranscription.disabled = false;
     }
+});
+
+// Add a function to clear the audio state
+const clearAudioState = () => {
+    currentAudioBlob = null;
+    audioChunks = [];
+    transcriptionOutput.value = '';
+    wavesurfer.empty();
+};
+
+// Add clear button handler if you have one
+clearTranscription?.addEventListener('click', clearAudioState);
+
+// Add visual feedback for audio state
+const updateUIState = (hasAudio) => {
+    submitTranscription.disabled = !hasAudio || !languageSelect.value;
+    // Optional: Add visual indication that audio is ready
+    document.querySelector('.waveform-container')?.classList.toggle('has-audio', hasAudio);
+};
+
+// Update the event listeners
+wavesurfer.on('ready', () => {
+    updateUIState(true);
+});
+
+languageSelect?.addEventListener('change', () => {
+    updateUIState(!!currentAudioBlob);
 });
